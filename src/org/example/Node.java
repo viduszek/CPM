@@ -30,6 +30,15 @@ public class Node {
         this.earliest_start = earliest_start;
     }
 
+    @Override
+    public String toString() {
+        return "Node{" +
+                "prev_nodes=" + prev_nodes +
+                ", id=" + id +
+                ", time=" + time +
+                '}';
+    }
+
     public double getLatest_start() {
         return latest_start;
     }

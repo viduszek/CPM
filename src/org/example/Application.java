@@ -20,19 +20,20 @@ public class Application implements ActionListener {
     public Application(){
         frame = new JFrame("CPM application");
         panel = new JPanel();
-        frame.setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/0.75));
+        frame.setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()/1.5));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
         panel.setLayout(null);
 
-        welcome_text = new JLabel("Witaj\nwybierz metode wprowadzania danych:");
-        button_1 = new JButton("metoda wprowadzania 1");
-        button_2 = new JButton("metoda wprowadzania 2");
+        welcome_text = new JLabel("Witaj\nwybierz metodę wprowadzania danych:");
+        button_1 = new JButton("poprzednicy");
+        button_2 = new JButton("kolejność zdarzeń");
 
-        welcome_text.setBounds(10,20,400,100);
-        button_1.setBounds(10,40,60,25);
-        button_2.setBounds(100,40,60,25);
-
+        welcome_text.setBounds(10,10,400,25);
+        button_1.setBounds(10,60,180,25);
+        button_2.setBounds(210,60,180,25);
+        button_1.addActionListener(this);
+        button_2.addActionListener(this);
         panel.add(welcome_text);
         panel.add(button_1);
         panel.add(button_2);
@@ -41,6 +42,11 @@ public class Application implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if(e.getSource()==button_1){
+            System.out.println("poprzednicy");
+        }
+        else if (e.getSource()==button_2) {
+            System.out.println("kolejnosc zdarzen");
+        }
     }
 }
