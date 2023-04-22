@@ -23,9 +23,9 @@ public class Node {
     @Override
     public String toString() {
         return "Node{" +
-                "prev_nodes=" + prev_nodes +
+                "prev_nodes="  +
                 ", id=" + id +
-                ", time=" + time +
+                ", time="  +
                 '}';
     }
 

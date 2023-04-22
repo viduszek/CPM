@@ -12,7 +12,7 @@ public class Application implements ActionListener {
     private JFrame frame;
     private JPanel panel;
     private JLabel welcome_text;
-    private JButton button_1, button_2, add;
+    private JButton button_1, button_2, add, start_again, confirm;
     private List<Action> actions = new ArrayList<>();
     private List<JTextField> insertData = new ArrayList<>();
     private JTable actions_table = new JTable();
@@ -33,6 +33,8 @@ public class Application implements ActionListener {
         button_1 = new JButton("CPM - poprzednicy");
         button_2 = new JButton("metoda wprowadzania 2");
         add = new JButton("Add");
+        start_again = new JButton("zacznij od nowa");
+        confirm = new JButton("potwierdz dane wejsciowe");
         insertData = new ArrayList<>();
         for (int i = 0; i < 3; i++) insertData.add(new JTextField(10));
 
@@ -42,6 +44,8 @@ public class Application implements ActionListener {
         button_2.setBounds(300,40,200,25);
         button_1.addActionListener(this);
         add.addActionListener(this);
+        confirm.addActionListener(this);
+        start_again.addActionListener(this);
 
         panel.add(welcome_text);
         panel.add(button_1);
@@ -87,17 +91,64 @@ public class Application implements ActionListener {
                 data[i] = Arrays.copyOf(array, array.length);
             }
             actions_table = new JTable(data,columns);
-            actions_table.setVisible(true);
-            actions_table.setBounds(40,370,400,400);
-            JScrollPane scrollPane = new JScrollPane();
-            scrollPane.setViewportView(actions_table);
             try {
                 panel.remove(actions_table);
-                panel.remove(scrollPane);
+                panel.remove(start_again);
+                panel.remove(confirm);
+                //panel.remove(scrollPane);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
+            actions_table.setBounds(40,370,400,400);
+            start_again.setBounds(40,780,200,40);
+            confirm.setBounds(250,780,200,40);
+            //JScrollPane scrollPane = new JScrollPane();
+            //scrollPane.setViewportView(actions_table);
+
+            actions_table.setVisible(true);
             panel.add(actions_table);
+            panel.add(start_again);
+            panel.add(confirm);
+            //panel.add(scrollPane);
+            panel.repaint();
+        }
+        else if (e.getSource()==start_again) {
+            System.out.println("wcisnieto zacznij od nowa");
+            String[] columns = {"nazwa","czas trwania","Poprzednie czynnosci"};
+            List<String[]> tmp_data = new ArrayList<>();
+            for (int i =0;i<3;i++) insertData.get(i).setText("");
+            actions.clear();
+            if(actions.size()>0) {
+                for (int i = 0; i < actions.size(); i++) {
+                    System.out.println(actions.get(i));
+                    tmp_data.add( actions.get(i).robocza_nazwa_1());
+                }
+            }
+            else tmp_data.add(new String[]{"","",""});
+            String[][] data = new String[tmp_data.size()][];
+            for (int i = 0; i < tmp_data.size(); i++) {
+                String[] array = tmp_data.get(i);
+                data[i] = Arrays.copyOf(array, array.length);
+            }
+            actions_table = new JTable(data,columns);
+            try {
+                panel.remove(actions_table);
+                panel.remove(start_again);
+                panel.remove(confirm);
+                //panel.remove(scrollPane);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            actions_table.setBounds(40,370,400,400);
+            start_again.setBounds(40,780,200,40);
+            confirm.setBounds(250,780,200,40);
+            //JScrollPane scrollPane = new JScrollPane();
+            //scrollPane.setViewportView(actions_table);
+
+            actions_table.setVisible(true);
+            panel.add(actions_table);
+            panel.add(start_again);
+            panel.add(confirm);
             //panel.add(scrollPane);
             panel.repaint();
         }
