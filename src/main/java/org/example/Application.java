@@ -8,11 +8,16 @@ import java.util.*;
 import java.util.List;
 
 import org.graphstream.graph.*;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.spriteManager.*;
-import org.graphstream.ui.swingViewer.*;
+//import org.graphstream.ui.swingViewer.*;
+import org.graphstream.ui.view.*;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.layout.Layout;
+import org.graphstream.ui.layout.springbox.implementations.LinLog;
+import org.graphstream.ui.view.ViewerPipe;
 
 import static org.example.CriticalPath.criticalPath;
 
@@ -81,7 +86,7 @@ public class Application implements ActionListener {
             panel.repaint();
         } else if (e.getSource() == add) {
             panel.removeAll();
-            String[] columns = new String[] { "ID", "Name", "Duration", "Previous Actions" };
+            String[] columns = new String[]{"ID", "Name", "Duration", "Previous Actions"};
             List<String[]> tmp_data = new ArrayList<>();
             String tmp_name;
             int tmp_time;
@@ -91,7 +96,7 @@ public class Application implements ActionListener {
             tmp_prev_actions = insertData.get(2).getText();
             if (tmp_time >= 0)
                 actions.add(new Action(tmp_prev_actions, tmp_time, tmp_name));
-                actions.get(actions.size()-1).set_id(actions.size()-1);
+            actions.get(actions.size() - 1).set_id(actions.size() - 1);
             for (int i = 0; i < 3; i++) {
                 insertData.get(i).setText("");
                 panel.add(insertData.get(i));
@@ -124,7 +129,7 @@ public class Application implements ActionListener {
         } else if (e.getSource() == start_again) {
             panel.removeAll();
             System.out.println("START AGAIN BUTTON");
-            String[] columns = new String[] { "ID", "Name", "Duration", "Previous Actions" };
+            String[] columns = new String[]{"ID", "Name", "Duration", "Previous Actions"};
             List<String[]> tmp_data = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 insertData.get(i).setText("");
@@ -137,10 +142,10 @@ public class Application implements ActionListener {
                     tmp_data.add(actions.get(i).robocza_nazwa_1());
                 }
             } else
-                tmp_data.add(new String[] { "", "", "", "" });
+                tmp_data.add(new String[]{"", "", "", ""});
             String[][] data = new String[tmp_data.size()][];
             for (int i = 0; i < tmp_data.size(); i++) {
-                String[] array = tmp_data.get(i); 
+                String[] array = tmp_data.get(i);
                 data[i] = Arrays.copyOf(array, array.length);
             }
             actions_table = new JTable(data, columns);
@@ -165,22 +170,22 @@ public class Application implements ActionListener {
             panel.repaint();
 
 
-
             //HashSet<CriticalPath.Task> tasks = new HashSet<CriticalPath.Task>();
             List<CriticalPath.Task> tasks = new ArrayList<>();
 
-            for (Action action:actions) {
+            for (Action action : actions) {
                 CriticalPath.Task task = new CriticalPath.Task(action.getAction_name(), action.getTime());
                 tasks.add(task);
             }
 
 
-            for (Action action:actions) {
-                if(!action.getPrev_action().isEmpty()){
+            for (Action action : actions) {
+                if (!action.getPrev_action().isEmpty()) {
                     String pom1 = action.getPrev_action();
                     for (int i = 0; i < action.getPrev_action().length(); i++) {
                         for (int j = 0; j < actions.size(); j++) {
-                            if(String.valueOf(pom1.charAt(i)).equals(tasks.get(j).name)) tasks.get(action.get_id()).setDependencies(tasks.get(j));
+                            if (String.valueOf(pom1.charAt(i)).equals(tasks.get(j).name))
+                                tasks.get(action.get_id()).setDependencies(tasks.get(j));
                         }
                     }
                 }
@@ -189,55 +194,67 @@ public class Application implements ActionListener {
             HashSet<CriticalPath.Task> hashSet = new HashSet<>();
             hashSet.addAll(tasks);
 
+            tasks.clear();
+
 
             CriticalPath.Task[] result = criticalPath(hashSet);
             CriticalPath.print(result);
 
+            CriticalPath.Task[] tasks2 = hashSet.toArray(new CriticalPath.Task[0]);
+
+            for (CriticalPath.Task task : tasks2) {
+                task.criticalALL();
+            }
+
+//            for (CriticalPath.Task task : tasks2) {
+//                System.out.println(task.name+" " +task.critical);
+//            }
+
 
             Graph graph = new SingleGraph("Tutorial 1");
             graph.setStrict(false);
-            graph.setAutoCreate( true );
+            graph.setAutoCreate(true);
             SpriteManager sman = new SpriteManager(graph);
 
-            for (Action action:actions) {
 
-                String pom = action.getAction_name();
-                String pom1 = action.getPrev_action();
+            for (CriticalPath.Task value : tasks2) {
+                String pom = value.name;
+                CriticalPath.Task[] pom2 = value.dependencies.toArray(new CriticalPath.Task[0]);
                 Sprite sprite = sman.addSprite(pom);
 
 
-                //graph.addNode(pom);
+                if (value.critical) graph.addNode(pom).setAttribute("ui.style", "fill-color: rgb(255,0,0);");
+                else graph.addNode(pom).setAttribute("ui.style", "fill-color: rgb(255,0,0);");
 
-                if (pom1.length() >= 1 ){
-                    for (int i = 0; i < pom1.length(); i++) {
 
-                        graph.addEdge(pom+pom1.charAt(i), pom, String.valueOf( pom1.charAt(i)));
+                if (pom2.length >= 1) {
+                    for (CriticalPath.Task task : pom2) {
+
+                        graph.addEdge(pom + task.name, pom, task.name);
 
                     }
                 }
-                //else graph.addNode(pom );
 
-                //sprite.setPosition(100, 100, 0);
-                sprite.addAttribute("ui.label",pom);
+                //   if (value.critical)
+
                 sprite.attachToNode(pom);
+                sprite.setAttribute("ui.label", pom);
 
 
             }
 
+            graph.setAttribute("ui.stylesheet", "url('style.css')");
 
-
-//            graph.addNode("A" );
-//            graph.addNode("B" );
-//            graph.addNode("C" );
-//            graph.addEdge("AB", "A", "B");
-//            graph.addEdge("BC", "B", "C");
-//            graph.addEdge("CA", "C", "A");
             System.setProperty("org.graphstream.ui", "swing");
-
 
             System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
             Viewer viewer = graph.display();
+
+
+            ViewerPipe viewerPipe = viewer.newViewerPipe();
+            viewerPipe.addAttributeSink(graph);
+            viewer.enableAutoLayout();
             View view = viewer.getDefaultView();
 // ...
             //view.getCamera().setViewPercent(2);
