@@ -69,6 +69,7 @@ public class Application implements ActionListener {
             panel.repaint();
         }
         else if (e.getSource()==add) {
+            panel.removeAll();
             String[] columns = {"nazwa","czas trwania","Poprzednie czynnosci"};
             List<String[]> tmp_data = new ArrayList<>();
             String tmp_name;
@@ -78,7 +79,10 @@ public class Application implements ActionListener {
             tmp_time = Integer.parseInt(insertData.get(1).getText());
             tmp_prev_actions = insertData.get(2).getText();
             actions.add(new Action(tmp_prev_actions,tmp_time,tmp_name));
-            for (int i =0;i<3;i++) insertData.get(i).setText("");
+            for (int i =0;i<3;i++) {
+                insertData.get(i).setText("");
+                panel.add(insertData.get(i));
+            }
             for (int i = 0; i < actions.size(); i++) {
                 System.out.println(actions.get(i));
                 tmp_data.add( actions.get(i).robocza_nazwa_1());
@@ -91,14 +95,6 @@ public class Application implements ActionListener {
                 data[i] = Arrays.copyOf(array, array.length);
             }
             actions_table = new JTable(data,columns);
-            try {
-                panel.remove(actions_table);
-                panel.remove(start_again);
-                panel.remove(confirm);
-                //panel.remove(scrollPane);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
             actions_table.setBounds(40,370,400,400);
             start_again.setBounds(40,780,200,40);
             confirm.setBounds(250,780,200,40);
@@ -106,6 +102,8 @@ public class Application implements ActionListener {
             //scrollPane.setViewportView(actions_table);
 
             actions_table.setVisible(true);
+            panel.add(add);
+            panel.add(welcome_text);
             panel.add(actions_table);
             panel.add(start_again);
             panel.add(confirm);
@@ -113,10 +111,14 @@ public class Application implements ActionListener {
             panel.repaint();
         }
         else if (e.getSource()==start_again) {
+            panel.removeAll();
             System.out.println("wcisnieto zacznij od nowa");
             String[] columns = {"nazwa","czas trwania","Poprzednie czynnosci"};
             List<String[]> tmp_data = new ArrayList<>();
-            for (int i =0;i<3;i++) insertData.get(i).setText("");
+            for (int i =0;i<3;i++) {
+                insertData.get(i).setText("");
+                panel.add(insertData.get(i));
+            }
             actions.clear();
             if(actions.size()>0) {
                 for (int i = 0; i < actions.size(); i++) {
@@ -131,14 +133,7 @@ public class Application implements ActionListener {
                 data[i] = Arrays.copyOf(array, array.length);
             }
             actions_table = new JTable(data,columns);
-            try {
-                panel.remove(actions_table);
-                panel.remove(start_again);
-                panel.remove(confirm);
-                //panel.remove(scrollPane);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
+            
             actions_table.setBounds(40,370,400,400);
             start_again.setBounds(40,780,200,40);
             confirm.setBounds(250,780,200,40);
@@ -146,6 +141,8 @@ public class Application implements ActionListener {
             //scrollPane.setViewportView(actions_table);
 
             actions_table.setVisible(true);
+            panel.add(add);
+            panel.add(welcome_text);
             panel.add(actions_table);
             panel.add(start_again);
             panel.add(confirm);
