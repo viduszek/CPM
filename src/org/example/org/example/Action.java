@@ -48,7 +48,7 @@ public class Action {
     }
 
     public String[] robocza_nazwa_1() {
-        String[] tmp = { action_name, Integer.toString(time), prev_action};
+        String[] tmp = new String[]{ action_name, Integer.toString(time), prev_action};
         return tmp;
     }
 
