@@ -9,5 +9,8 @@
         <module name="CPMfun" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="CPM" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -238,7 +238,30 @@ public class Application implements ActionListener {
 
 
             CriticalPath.Task[] result = criticalPath(hashSet);
-            CriticalPath.print(result);
+            //CriticalPath.print(result);
+            String[] columns = new String[] { "Task name", "Earliest start", "Earliest finish","Latest start", "Latest finish", "Reserve", "Is critical"};
+            List<String[]> tmp_data = new ArrayList<>();
+            for (CriticalPath.Task t : result) {
+                tmp_data.add(t.toStringArray());
+            }
+            String[][] data = new String[tmp_data.size()][];
+            for(int i = 0; i < tmp_data.size();i++) {
+                String[] array = tmp_data.get(i);
+                data[i] = Arrays.copyOf(array,array.length);
+            }
+
+            JTable final_table = new JTable(data,columns);
+            frame.setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 10),
+                    (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 10));
+            String[] pom5 = { "Task", "ES", "EF","LS", "LF", "Reserve", "Is critical"};
+            String[][] pom6 = new String[1][pom5.length];
+            pom6[0] = pom5;
+            JTable pom_table = new JTable(pom6 ,columns);
+            pom_table.setBounds( 10,((int) (frame.getHeight() / 2.))+60,400,20);
+            pom_table.setVisible(true);
+            final_table.setBounds( 10,((int) (frame.getHeight() / 2.))+80,400,500);
+            final_table.setVisible(true);
+
 
             CriticalPath.Task[] tasks2 = hashSet.toArray(new CriticalPath.Task[0]);
 
@@ -318,6 +341,8 @@ public class Application implements ActionListener {
             //view.getCamera().setViewPercent(2);
 
             panel.add(viewPanel);
+            panel.add(final_table);
+            panel.add(pom_table);
             frame.add(panel);
             frame.setVisible(true);
 //            panel.repaint();
