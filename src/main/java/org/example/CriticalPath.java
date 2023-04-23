@@ -35,6 +35,7 @@ public class CriticalPath {
         // a name for the task for printing
         public String name;
         // the earliest start
+        public boolean critical;
         public int earlyStart;
         // the earliest finish
         public int earlyFinish;
@@ -70,6 +71,10 @@ public class CriticalPath {
             String[] toString = {name, earlyStart + "", earlyFinish + "", latestStart + "", latestFinish + "",
                     latestStart - earlyStart + "", criticalCond};
             return toString;
+        }
+
+        public void criticalALL (){
+            this.critical = earlyStart == latestStart;
         }
 
         public boolean isDependent(Task t) {

@@ -1,0 +1,6 @@
+node {
+    shape: box;
+    fill-color: red;
+    stroke-mode: plain;
+    stroke-color: yellow;
+}
