@@ -73,12 +73,12 @@ public class Application implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == button_1) {
             panel.removeAll();
-            welcome_text.setText("Enter: Action Name, Duration, Previous Actions");
+            welcome_text.setText("    Action Name         Duration                 Next Actions");
             panel.add(welcome_text);
-            insertData.get(0).setBounds(40, 140, 150, 40);
-            insertData.get(1).setBounds(40, 200, 150, 40);
-            insertData.get(2).setBounds(40, 260, 150, 40);
-            add.setBounds(40, 320, 150, 40);
+            insertData.get(0).setBounds(20, 90, 100, 40);
+            insertData.get(1).setBounds(140, 90, 100, 40);
+            insertData.get(2).setBounds(260, 90, 100, 40);
+            add.setBounds(20, 150, 100, 40);
             add.setText("Add");
             panel.add(add);
             for (int i = 0; i < 3; i++)
@@ -112,9 +112,9 @@ public class Application implements ActionListener {
                 data[i] = Arrays.copyOf(array, array.length);
             }
             actions_table = new JTable(data, columns);
-            actions_table.setBounds(40, 370, 400, 400);
-            start_again.setBounds(40, 780, 200, 40);
-            confirm.setBounds(250, 780, 200, 40);
+            actions_table.setBounds(20, 200, 400, 250);
+            start_again.setBounds(30, 475, 180, 40);
+            confirm.setBounds(230, 475, 180, 40);
             // JScrollPane scrollPane = new JScrollPane();
             // scrollPane.setViewportView(actions_table);
 
@@ -150,9 +150,9 @@ public class Application implements ActionListener {
             }
             actions_table = new JTable(data, columns);
 
-            actions_table.setBounds(40, 370, 400, 200);
-            start_again.setBounds(40, 780, 200, 40);
-            confirm.setBounds(250, 780, 200, 40);
+            actions_table.setBounds(20, 200, 400, 250);
+            start_again.setBounds(30, 475, 180, 40);
+            confirm.setBounds(230, 475, 180, 40);
             // JScrollPane scrollPane = new JScrollPane();
             // scrollPane.setViewportView(actions_table);
 
