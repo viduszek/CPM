@@ -67,6 +67,9 @@ public class CriticalPath {
         }
 
         public String[] toStringArray() {
+//            Task[] t = dependencies.toArray(new Task[0]);
+//            String well = "";
+//            if (t[0]!= null)  well = t[0].name;
             String criticalCond = earlyStart == latestStart ? "Yes" : "No";
             String[] toString = {name, earlyStart + "", earlyFinish + "", latestStart + "", latestFinish + "",
                     latestStart - earlyStart + "", criticalCond};

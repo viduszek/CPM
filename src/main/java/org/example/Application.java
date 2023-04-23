@@ -39,8 +39,8 @@ public class Application implements ActionListener {
     public Application() {
         frame = new JFrame("Badania Operacyjne i Logistyka");
         panel = new JPanel();
-        frame.setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2),
-                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
+        frame.setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 1.5),
+                (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 1.5));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
         panel.setLayout(null);
@@ -170,7 +170,6 @@ public class Application implements ActionListener {
             panel.removeAll();
             panel.repaint();
 
-
             //HashSet<CriticalPath.Task> tasks = new HashSet<CriticalPath.Task>();
             List<CriticalPath.Task> tasks = new ArrayList<>();
 
@@ -207,6 +206,16 @@ public class Application implements ActionListener {
                 task.criticalALL();
             }
 
+
+            for (CriticalPath.Task task : tasks2) {
+                CriticalPath.Task[] a = task.dependencies.toArray(new CriticalPath.Task[0]);
+                for (int i = 0; i < a.length; i++) {
+                    System.out.println(task.name + " -> " + a[i].name);
+                }
+
+            }
+
+
 //            for (CriticalPath.Task task : tasks2) {
 //                System.out.println(task.name+" " +task.critical);
 //            }
@@ -229,15 +238,16 @@ public class Application implements ActionListener {
                 //Sprite sprite = sman.addSprite(pom);
 
 
-                if (value.critical) graph.addNode(pom).setAttribute("ui.style", "fill-color: red;");
-                else graph.addNode(pom).setAttribute("ui.style", "fill-color: green;");
+                //if (value.critical)
+                graph.addNode(pom);//.setAttribute("ui.style", "size-mode: fit; shape: rounded-box; fill-color: white; stroke-mode: plain; padding: 3px, 2px; ");
+                //else graph.addNode(pom).setAttribute("ui.style", "fill-color: green;");
 
 
                 if (pom2.length >= 1) {
                     for (CriticalPath.Task task : pom2) {
 
-                        if (value.critical && task.critical) graph.addEdge(pom + task.name, pom, task.name).setAttribute("ui.style", "fill-color: red;");
-                        else graph.addEdge(pom + task.name, pom, task.name);
+                        if (value.critical && task.critical) graph.addEdge(pom + task.name, pom, task.name).setAttribute("ui.style", "fill-color: red; shape: cubic-curve;");
+                        else graph.addEdge(pom + task.name, pom, task.name).setAttribute("ui.style", "shape: cubic-curve;");
 
                     }
                 }
@@ -250,17 +260,19 @@ public class Application implements ActionListener {
 
             }
 
-            //graph.setAttribute("ui.stylesheet", "url('style.css')");
+            graph.setAttribute("ui.style", "padding: 20px;");
 
             System.setProperty("org.graphstream.ui", "swing");
 
             for (Node node : graph) {
-                node.addAttribute("ui.label", node.getId());
+
+                node.setAttribute("ui.style", "text-alignment: at-right; text-padding: 3px, 2px; text-background-mode: rounded-box; text-background-color: #EB2; text-color: #222;");
+                node.setAttribute("ui.label", node.getId());
             }
 
 //            for (Edge edge : graph.getEachEdge()) {
 //                  //  edge.get
-//                edge.addAttribute("ui.hide");
+//                edge.addAttribute("ui.style", "shape: freeplane;");
 //            }
 
 
