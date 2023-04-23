@@ -19,6 +19,13 @@ import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.springbox.implementations.LinLog;
 import org.graphstream.ui.view.ViewerPipe;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import static org.example.CriticalPath.criticalPath;
 
@@ -106,6 +113,38 @@ public class Application implements ActionListener {
                 System.out.println(actions.get(i));
                 tmp_data.add(actions.get(i).robocza_nazwa_1());
             }
+
+            //
+            // Key strokes
+            //
+
+            frame.getRootPane().setDefaultButton(add);
+            InputMap inputMap = frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+            KeyStroke shiftEnter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.SHIFT_DOWN_MASK);
+            KeyStroke clear = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.SHIFT_DOWN_MASK);
+            inputMap.put(shiftEnter, "confirm");
+            inputMap.put(clear, "start_again");
+            ActionMap actionMap = frame.getRootPane().getActionMap();
+            actionMap.put("confirm", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    confirm.doClick(); // Replace "confirm" with the name of your button
+                }
+            });
+
+            actionMap.put("start_again", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    start_again.doClick(); // Replace "confirm" with the name of your button
+                }
+            });
+
+
+
+            //
+            // Key strokes
+            //
+
 
             String[][] data = new String[tmp_data.size()][];
             for (int i = 0; i < tmp_data.size(); i++) {
@@ -229,8 +268,8 @@ public class Application implements ActionListener {
                 //Sprite sprite = sman.addSprite(pom);
 
 
-                if (value.critical) graph.addNode(pom).setAttribute("ui.style", "fill-color: red;");
-                else graph.addNode(pom).setAttribute("ui.style", "fill-color: green;");
+                if (value.critical) graph.addNode(pom).setAttribute("ui.style", "fill-color: blue;");
+                else graph.addNode(pom).setAttribute("ui.style", "fill-color: blue;");
 
 
                 if (pom2.length >= 1) {
