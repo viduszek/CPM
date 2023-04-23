@@ -12,6 +12,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.spriteManager.*;
 //import org.graphstream.ui.swingViewer.*;
+import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.*;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
@@ -211,55 +212,75 @@ public class Application implements ActionListener {
 //            }
 
 
-            Graph graph = new SingleGraph("Tutorial 1");
+            Graph graph = new SingleGraph("Tutorial");
+
             graph.setStrict(false);
             graph.setAutoCreate(true);
-            SpriteManager sman = new SpriteManager(graph);
+
+            graph.addAttribute("ui.quality");
+            graph.addAttribute("ui.antialias");
+
+            //SpriteManager sman = new SpriteManager(graph);
 
 
             for (CriticalPath.Task value : tasks2) {
                 String pom = value.name;
                 CriticalPath.Task[] pom2 = value.dependencies.toArray(new CriticalPath.Task[0]);
-                Sprite sprite = sman.addSprite(pom);
+                //Sprite sprite = sman.addSprite(pom);
 
 
-                if (value.critical) graph.addNode(pom).setAttribute("ui.style", "fill-color: rgb(255,0,0);");
-                else graph.addNode(pom).setAttribute("ui.style", "fill-color: rgb(255,0,0);");
+                if (value.critical) graph.addNode(pom).setAttribute("ui.style", "fill-color: red;");
+                else graph.addNode(pom).setAttribute("ui.style", "fill-color: green;");
 
 
                 if (pom2.length >= 1) {
                     for (CriticalPath.Task task : pom2) {
 
-                        graph.addEdge(pom + task.name, pom, task.name);
+                        if (value.critical && task.critical) graph.addEdge(pom + task.name, pom, task.name).setAttribute("ui.style", "fill-color: red;");
+                        else graph.addEdge(pom + task.name, pom, task.name);
 
                     }
                 }
 
                 //   if (value.critical)
 
-                sprite.attachToNode(pom);
-                sprite.setAttribute("ui.label", pom);
+//                sprite.attachToNode(pom);
+//                sprite.addAttribute("ui.label", pom);
 
 
             }
 
-            graph.setAttribute("ui.stylesheet", "url('style.css')");
+            //graph.setAttribute("ui.stylesheet", "url('style.css')");
 
             System.setProperty("org.graphstream.ui", "swing");
 
-            System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+            for (Node node : graph) {
+                node.addAttribute("ui.label", node.getId());
+            }
 
-            Viewer viewer = graph.display();
+//            for (Edge edge : graph.getEachEdge()) {
+//                  //  edge.get
+//                edge.addAttribute("ui.hide");
+//            }
 
 
-            ViewerPipe viewerPipe = viewer.newViewerPipe();
-            viewerPipe.addAttributeSink(graph);
+            //Viewer viewer = graph.display();
+            Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+
+            final ViewPanel viewPanel = viewer.addDefaultView(true);
+
             viewer.enableAutoLayout();
-            View view = viewer.getDefaultView();
+
+//            ViewerPipe viewerPipe = viewer.newViewerPipe();
+//            viewerPipe.addAttributeSink(graph);
+//            viewer.enableAutoLayout();
+//            View view = viewer.getDefaultView();
 // ...
             //view.getCamera().setViewPercent(2);
 
-            panel.add((Component) view);
+            panel.add(viewPanel);
+            frame.add(panel);
+            frame.setVisible(true);
 //            panel.repaint();
         }
     }
